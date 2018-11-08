@@ -33,24 +33,8 @@ public class UploadController {
 
     List<String> files = new ArrayList<String>();
 
-//    @PostMapping("/post")
-//    public ResponseEntity<String> handleFileUpload(@RequestParam("file")MultipartFile file) {
-//        String message = "";
-//        try {
-//            storageService.store(file);
-//            files.add(file.getOriginalFilename());
-//
-//            message = "Your successfully upload" + file.getOriginalFilename();
-//
-//            return ResponseEntity.status(HttpStatus.OK).body(message);
-//        } catch (Exception e) {
-//            message = "Fail to upload" + file.getOriginalFilename();
-//            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
-//        }
-//    }
-
     @PostMapping("/post")
-    public String uploadMultipartFile(@RequestParam("uploadFile") MultipartFile file) {
+    public String uploadMultipartFile(@RequestParam("file") MultipartFile file) {
         try {
             FileModel fileModel = new FileModel(file.getOriginalFilename(), file.getContentType(),
                     file.getBytes());
@@ -63,29 +47,25 @@ public class UploadController {
         }
     }
 
-//    @GetMapping("/getallfiles")
-//    public ResponseEntity<List<String>> getListFiles(Model model) {
-//        List<String> filesNames = files
-//                .stream().map(fileName -> MvcUriComponentsBuilder
-//                .fromMethodName(UploadController.class, "getFile", fileName)
-//                .build().toString()).collect(Collectors.toList());
-//
-//        return ResponseEntity.ok().body(filesNames);
-//    }
-
     @JsonView(View.FileInfo.class)
     @GetMapping("/getallfiles")
-    public List<FileModel> getListFiles() {
-        return fileRepository.findAll();
+    public ResponseEntity<List<String>> getListFiles() {
+//        return fileRepository.findAll();
+        List<String> filesNames = files
+                .stream().map(fileName -> MvcUriComponentsBuilder
+                .fromMethodName(UploadController.class, "getFile", fileName)
+                .build().toString()).collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(filesNames);
     }
 
-//    @GetMapping("/files/{filename:.+}")
-//    @ResponseBody
-//    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-//        Resource file = storageService.loadFile(filename);
-//
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachement; filename=\""+
-//                        file.getFilename()+ "\"").body(file);
-//    }
+    @GetMapping("/files/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        Resource file = storageService.loadFile(filename);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachement; filename=\""+
+                        file.getFilename()+ "\"").body(file);
+    }
 }

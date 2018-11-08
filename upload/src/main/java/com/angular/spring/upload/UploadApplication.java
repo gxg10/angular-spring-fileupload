@@ -15,6 +15,7 @@ public class UploadApplication implements CommandLineRunner {
 	@Resource
 	StorageService storageService;
 
+
 	public static void main(String[] args) {
 		SpringApplication.run(UploadApplication.class, args);
 	}
