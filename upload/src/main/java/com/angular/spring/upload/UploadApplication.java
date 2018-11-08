@@ -4,10 +4,12 @@ import com.angular.spring.upload.storage.StorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
 
 @SpringBootApplication
+@EnableTransactionManagement
 public class UploadApplication implements CommandLineRunner {
 
 	@Resource
